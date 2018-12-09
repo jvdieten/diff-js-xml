@@ -1,0 +1,50 @@
+{
+  "private": true,
+  "engines": {
+    "node": ">=0.6.19"
+  },
+  "name": "diff-js-xml",
+  "version": "0.0.1",
+  "description": "XML JSON object compare module",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jvdieten/diff-js-xml"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "test:watch": "npm run test -- --watch --watch-extensions ts",
+    "cover": "nyc --reporter=lcov --reporter=text npm run test",
+    "lint": "tslint -t stylish --project  \"tsconfig.json\"",
+    "lint:fix": "npm run lint -- --fix",
+    "build": "tsc -p tsconfig.production.json",
+    "build:watch": "tsc -w -p tsconfig.production.json",
+    "prepublish": "npm run test && npm run lint && npm run build"
+  },
+  "keywords": [],
+  "author": "Joost van Dieten <joost.van.dieten@testassured.nl> (http://www.testassured.nl)",
+  "license": "MIT",
+  "dependencies": {
+    "underscore": "^1.9.1",
+    "xml-js": "^1.6.8"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.3",
+    "@types/underscore": "^1.8.9",
+    "@types/xml-js": "^1.0.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "onchange": "^5.1.0",
+    "prettier": "^1.15.1",
+    "sinon": "^4.1.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "tslint-microsoft-contrib": "^5.2.1",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.1.6"
+  }
+}
