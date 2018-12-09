@@ -1,3 +1,5 @@
+https://travis-ci.com/jvdieten/diff-js-xml.svg?branch=master
+
 # diff-js-xml
 Project to compare xml or json objects very useful for A-B testing
 
