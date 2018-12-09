@@ -40,6 +40,3 @@ tool.diff(leftcompare, rightcompare, schema, options, (result) => {
 
 ## Contributors
 * Joost van Dieten <joost.van.dieten@testassured.nl> (http://www.testassured.nl)
-
-
-[]: https://travis-ci.com/jvdieten/diff-js-xml.svg?branch=master
