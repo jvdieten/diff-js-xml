@@ -1,8 +1,4 @@
 {
-  "private": true,
-  "engines": {
-    "node": ">=0.6.19"
-  },
   "name": "diff-js-xml",
   "version": "0.0.1",
   "description": "XML JSON object compare module",
@@ -24,7 +20,7 @@
     "build:watch": "tsc -w -p tsconfig.production.json",
     "prepublish": "npm run test && npm run lint && npm run build"
   },
-  "keywords": [],
+  "keywords": ["xml compare", "json compare", "xmldiff", "json diff", "xml2xml diff", "json2json diff"],
   "author": "Joost van Dieten <joost.van.dieten@testassured.nl> (http://www.testassured.nl)",
   "license": "MIT",
   "dependencies": {
