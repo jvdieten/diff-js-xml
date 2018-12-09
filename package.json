@@ -6,19 +6,22 @@
     "type": "git",
     "url": "git://github.com/jvdieten/diff-js-xml"
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "./dist/src/index.js",
+  "main": "dist/src/index",
+  "typings": "dist/src/index",
+  "files": [
+    "dist/src/index.js",
+    "dist/src/index.d.ts"
+  ],
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "test:watch": "npm run test -- --watch --watch-extensions ts",
     "cover": "nyc --reporter=lcov --reporter=text npm run test",
+    "clean": "rm -rf dist",
     "lint": "tslint -t stylish --project  \"tsconfig.json\"",
     "lint:fix": "npm run lint -- --fix",
-    "build": "tsc -p tsconfig.production.json",
+    "build": "npm run clean && tsc -p tsconfig.production.json",
     "build:watch": "tsc -w -p tsconfig.production.json",
-    "prepublish": "npm run test && npm run lint && npm run build"
+    "prepublishOnly": "npm run test && npm run lint && npm run build"
   },
   "keywords": [
     "xml compare",
@@ -53,4 +56,5 @@
     "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.1.6"
   }
+
 }
