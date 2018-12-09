@@ -1,4 +1,4 @@
-https://travis-ci.com/jvdieten/diff-js-xml.svg?branch=master
+[![Travis-ci Build Status](https://travis-ci.com/jvdieten/diff-js-xml.svg?branch=master)](https://travis-ci.com/jvdieten/diff-js-xml)
 
 # diff-js-xml
 Project to compare xml or json objects very useful for A-B testing
@@ -40,3 +40,6 @@ tool.diff(leftcompare, rightcompare, schema, options, (result) => {
 
 ## Contributors
 * Joost van Dieten <joost.van.dieten@testassured.nl> (http://www.testassured.nl)
+
+
+[]: https://travis-ci.com/jvdieten/diff-js-xml.svg?branch=master
