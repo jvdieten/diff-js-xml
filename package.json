@@ -9,7 +9,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/index.js",
+  "main": "./dist/src/index.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "test:watch": "npm run test -- --watch --watch-extensions ts",
