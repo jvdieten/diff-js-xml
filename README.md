@@ -37,7 +37,7 @@ const schema = { elementA: { skipKey:true}}
 const options = {compareElementValues: false}
 ```
 
-**result**array returned from the diff method containing all the differences with following result types:
+**result** array returned from the diff method containing all the differences with following result types:
 
 **missing element** xml element is not found in leftXML or rightXML
 
