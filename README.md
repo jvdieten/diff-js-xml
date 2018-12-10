@@ -2,15 +2,19 @@
 [![NPM](https://nodei.co/npm/diff-js-xml.png)](https://nodei.co/npm/diff-js-xml/)
 
 # diff-js-xml
-Project to compare xml or json objects very useful for A-B testing:
+Module to compare XML or JSON objects very useful for A-B testing main features:
+
+- Compare elements and element values
+- Compare with wildcards for element values
+- Clear reporting of differences in result array see below
 
 ## Installation
 ```
 $ npm install diff-js-xml --save
 ```
 ### Usage for comparing XML
-```
-var tool = require('diff-js-xml');
+```javascript
+const tool = require('diff-js-xml');
  
 tool.diffAsXml(lhsXML, rhsXML, schema, options, (result) => {
 
@@ -19,7 +23,21 @@ tool.diffAsXml(lhsXML, rhsXML, schema, options, (result) => {
 Before comparing xml is first transformed into JSON object with **xml-js** module  
 
 **lhsXML and rhsXML** are the two XML strings to compare.
-**result** is an array returned from the diff method containing all the differences with following result types:
+
+**schema**  options for specific keys for example skip one of them
+
+```javascript
+const schema = { elementA: { skipKey:true}}
+```
+
+**options** generic options 1 implemented at the moment copareElementValues default is true to not compare values for
+all elements configure as below
+
+```
+var options = {compareElementValues: false}
+```
+
+**result**array returned from the diff method containing all the differences with following result types:
 
 **missing element** xml element is not found in leftXML or rightXML
 
@@ -32,10 +50,21 @@ Before comparing xml is first transformed into JSON object with **xml-js** modul
     message: 'field element.subelement has lhs value TestA and rhs value TestB' } ]
 ```
 
+#### wildcard values
+
+For A-B testing purposes it can be very handy to compare with wildcards if for exammple you are not interested in all 
+the data. You can put an * in the first (lhs) xml file. The result of this compare will be no differences.
+
+```javascript
+const lhsxml =
+    '<string-array name="languages_array"><item>*</item><item2>Chinese</item2><item3>French</item3><item4>Spanish</item4></string-array>'
+const string =
+    '<string-array name="languages_array"><item>Dutch</item><item2>Chinese</item2><item3>French</item3><item4>Spanish</item4></string-array>'
+```
 
 ### Usage for comparing JSON
-```
-var tool = require('diff-js-xml');
+```javascript
+const tool = require('diff-js-xml');
  
 tool.diff(lhsObject, rhsObject, schema, options, (result) => {
 

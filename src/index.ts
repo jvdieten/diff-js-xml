@@ -1,28 +1,24 @@
 import underscore from "underscore"
 import { xml2json } from "xml-js"
 import { IDiffResultModel } from "../lib/model/diff-result-model"
+import { IFieldOptions, ISchema } from "../lib/model/field-options-schema"
+import { IOptionsModel } from "../lib/model/options-model"
 
 const compareObjects = (
   a: Object,
   b: Object,
-  schema: Object | null,
+  schema: ISchema,
   keyPrefix: string | null,
-  options: Object[] | null
+  options: IOptionsModel
 ): IDiffResultModel[] => {
   let differences: IDiffResultModel[] = []
   const ak: string[] = Object.keys(a)
   const bk: string[] = Object.keys(b)
-  const allKeys = underscore.union(ak, bk)
+  const allKeys: string[] = underscore.union(ak, bk)
 
   allKeys.forEach(key => {
     const formattedKey: string = (keyPrefix || "") + key
-    const fieldOptions = (<any>schema)[key] || {}
-
-    if (options !== null) {
-      if (options.filter && options.filter((<any>a)[key], (<any>b)[key])) {
-        return
-      }
-    }
+    const fieldOptions: IFieldOptions = schema[key] || {}
 
     if (!underscore.contains(ak, key)) {
       if (fieldOptions.skipKey) {
@@ -38,16 +34,22 @@ const compareObjects = (
       }
     } else {
       //compare values
-      const valueA: string = (<any>a)[key].toString()
-      const valueB: string = (<any>b)[key].toString()
-      if (valueB !== undefined && valueA !== valueB && valueA !== "*") {
-        const diffResult: IDiffResultModel = {
-          path: formattedKey,
-          resultType: "difference in element value",
-          message: `field ${formattedKey} has lhs value ${valueA} and rhs value ${valueB}`
-        }
+      if (fieldOptions.skipKey) {
+        return
+      } else {
+        if (options.compareElementValues) {
+          const valueA: string = (<any>a)[key].toString()
+          const valueB: string = (<any>b)[key].toString()
+          if (valueB !== undefined && valueA !== valueB && valueA !== "*") {
+            const diffResult: IDiffResultModel = {
+              path: formattedKey,
+              resultType: "difference in element value",
+              message: `field ${formattedKey} has lhs value ${valueA} and rhs value ${valueB}`
+            }
 
-        return differences.push(diffResult)
+            return differences.push(diffResult)
+          }
+        }
       }
     }
 
@@ -73,7 +75,6 @@ const compareObjects = (
         if (objA === "" && objB === "") {
           return
         }
-
         if (objA === "false" && objB === "false") {
           return
         }
@@ -106,7 +107,7 @@ const compareObjects = (
             compareObjects(
               (<any>a)[key][i],
               (<any>b)[key][i],
-              fieldOptions,
+              schema,
               `${formattedKey}[${i}].`,
               options
             )
@@ -118,7 +119,7 @@ const compareObjects = (
         compareObjects(
           (<any>a)[key],
           (<any>b)[key],
-          fieldOptions,
+          schema,
           `${formattedKey}.`,
           options
         )
@@ -137,18 +138,26 @@ function adjustXMLforDiff(input: string): string {
 export function diff(
   lhs: Object,
   rhs: Object,
-  schema: Object | null,
-  options: Object[] | null,
+  schema: ISchema | undefined,
+  options: IOptionsModel | undefined,
   next: any
 ) {
-  next(compareObjects(lhs, rhs, schema || {}, null, options))
+  next(
+    compareObjects(
+      lhs,
+      rhs,
+      schema || {},
+      null,
+      options || { compareElementValues: true }
+    )
+  )
 }
 
 export function diffAsXml(
   lhs: string,
   rhs: string,
-  schema: Object | null,
-  options: Object[] | null,
+  schema: ISchema | undefined,
+  options: IOptionsModel | undefined,
   next: any
 ) {
   const lhsp = xml2json(lhs, {
@@ -165,5 +174,13 @@ export function diffAsXml(
   const rhsCompareString = adjustXMLforDiff(rhsp)
   const jsonLhs = JSON.parse(lhsCompareString)
   const jsonRhs = JSON.parse(rhsCompareString)
-  next(compareObjects(jsonLhs, jsonRhs, schema || {}, null, options))
+  next(
+    compareObjects(
+      jsonLhs,
+      jsonRhs,
+      schema || {},
+      null,
+      options || { compareElementValues: true }
+    )
+  )
 }
