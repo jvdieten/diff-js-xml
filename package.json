@@ -9,6 +9,7 @@
   "main": "dist/src/index",
   "typings": "dist/src/index",
   "files": [
+    "lib/**/*",
     "dist/src/index.js",
     "dist/src/index.d.ts"
   ],
