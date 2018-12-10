@@ -2,7 +2,7 @@
 [![NPM](https://nodei.co/npm/diff-js-xml.png)](https://nodei.co/npm/diff-js-xml/)
 
 # diff-js-xml
-Project to compare xml or json objects very useful for A-B testing
+Project to compare xml or json objects very useful for A-B testing:
 
 ## Installation
 ```
@@ -24,6 +24,13 @@ Before comparing xml is first transformed into JSON object with **xml-js** modul
 **missing element** xml element is not found in leftXML or rightXML
 
 **difference in element value** values of elements is not equal 
+
+**Example of result**
+```
+[ { path: 'element.subelement',
+    type: 'difference in field value',
+    message: 'field element.subelement has lhs value TestA and rhs value TestB' } ]
+```
 
 
 ### Usage for comparing JSON
