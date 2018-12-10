@@ -41,7 +41,7 @@ const compareObjects = (
         return differences.push({
           path: formattedKey,
           type: "difference in field value",
-          message: `field ${formattedKey} has value lhs value ${valueA} and rhs value ${valueB}`
+          message: `field ${formattedKey} has lhs value ${valueA} and rhs value ${valueB}`
         })
       }
     }
