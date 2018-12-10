@@ -14,7 +14,7 @@ var tool = require('diff-js-xml');
  
 tool.diffAsXml(lhsXML, rhsXML, schema, options, (result) => {
 
-}
+});
 ```
 Before comparing xml is first transformed into JSON object with **xml-js** module  
 
@@ -39,7 +39,7 @@ var tool = require('diff-js-xml');
  
 tool.diff(lhsObject, rhsObject, schema, options, (result) => {
 
-}
+});
 ```
 **lhsObject and rhsObject** are the two JSON objects to compare.
 **result** is an array returned from the diff method containing all the differences see above.
