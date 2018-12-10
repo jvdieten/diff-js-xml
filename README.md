@@ -24,17 +24,17 @@ Before comparing xml is first transformed into JSON object with **xml-js** modul
 
 **lhsXML and rhsXML** are the two XML strings to compare.
 
-**schema**  options for specific keys for example skip one of them
+**schema**  options for specific keys for example skip one of them or null if not needed
 
 ```javascript
 const schema = { elementA: { skipKey:true}}
 ```
 
-**options** generic options 1 implemented at the moment copareElementValues default is true to not compare values for
-all elements configure as below
+**options** generic options or null if not needed current options available:
+- **compareElementValues** to disable comparing of element values default is true
 
-```
-var options = {compareElementValues: false}
+```javascript
+const options = {compareElementValues: false}
 ```
 
 **result**array returned from the diff method containing all the differences with following result types:
