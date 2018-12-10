@@ -1,6 +1,8 @@
 import { should } from "chai"
 import * as tool from "../src/index"
 
+import { IDiffResultModel } from "../lib/model/diff-result-model"
+
 should()
 
 describe("when comparing two identical objects", () => {
@@ -8,7 +10,7 @@ describe("when comparing two identical objects", () => {
   const rhs: Object = { a: { b: 10, c: "Hello" }, d: [1, 2, 3] }
 
   it("should return an empty array of differences", () => {
-    tool.diff(lhs, rhs, null, null, (result: Object[]) => {
+    tool.diff(lhs, rhs, null, null, (result: IDiffResultModel[]) => {
       result.length.should.equal(0)
     })
   })
@@ -18,10 +20,10 @@ describe("when comparing two objects with a different value in a property", () =
   const lhs: Object = { a: { b: 11, c: "Hello" }, d: [1, 2, 3] }
   const rhs: Object = { a: { b: 10, c: "Hello" }, d: [1, 2, 3] }
 
-  let result: any[] = []
+  let result: IDiffResultModel[] = []
 
   before(() => {
-    tool.diff(lhs, rhs, null, null, (dff: Object[]) => {
+    tool.diff(lhs, rhs, null, null, (dff: IDiffResultModel[]) => {
       result = dff
     })
   })
@@ -35,7 +37,7 @@ describe("when comparing two objects with a different value in a property", () =
   })
 
   it("should return the corrent message", () => {
-    result[0].type.should.equal("difference in field value")
+    result[0].resultType.should.equal("difference in element value")
   })
 })
 
@@ -43,10 +45,10 @@ describe("when comparing two objects with differences in an array", () => {
   const lhs: Object = { a: { b: 10, c: "Hello" }, d: [1, 2, 4] }
   const rhs: Object = { a: { b: 10, c: "Hello" }, d: [1, 2, 3] }
 
-  let result: any[] = []
+  let result: IDiffResultModel[] = []
 
   before(() => {
-    tool.diff(lhs, rhs, null, null, (dff: Object[]) => {
+    tool.diff(lhs, rhs, null, null, (dff: IDiffResultModel[]) => {
       result = dff
     })
   })
@@ -67,7 +69,7 @@ describe("when comparing two identical xml strings", () => {
     '<string-array name="languages_array"><item>English</item><item>Chinese</item><item>French</item><item>Spanish</item></string-array>'
 
   it("should return an empty array of differences", () => {
-    tool.diffAsXml(lhsxml, rhsxml, null, null, (result: Object[]) => {
+    tool.diffAsXml(lhsxml, rhsxml, null, null, (result: IDiffResultModel[]) => {
       result.length.should.equal(0)
     })
   })
@@ -79,10 +81,10 @@ describe("when comparing two different xml values", () => {
   const rhsxml: string =
     '<string-array name="languages_array"><item>4</item><item2>Chinese</item2><item3>French</item3><item4>Spanish</item4></string-array>'
 
-  let result: any[] = []
+  let result: IDiffResultModel[] = []
 
   before(() => {
-    tool.diffAsXml(lhsxml, rhsxml, null, null, (dff: Object[]) => {
+    tool.diffAsXml(lhsxml, rhsxml, null, null, (dff: IDiffResultModel[]) => {
       result = dff
     })
   })
@@ -102,10 +104,10 @@ describe("when comparing wildcard xml element values", () => {
   const rhsxml: string =
     '<string-array name="languages_array"><item>Dutch</item><item2>Chinese</item2><item3>French</item3><item4>Spanish</item4></string-array>'
 
-  let result: any[] = []
+  let result: IDiffResultModel[] = []
 
   before(() => {
-    tool.diffAsXml(lhsxml, rhsxml, null, null, (dff: Object[]) => {
+    tool.diffAsXml(lhsxml, rhsxml, null, null, (dff: IDiffResultModel[]) => {
       result = dff
     })
   })

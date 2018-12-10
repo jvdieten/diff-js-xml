@@ -1,5 +1,6 @@
 import underscore from "underscore"
 import { xml2json } from "xml-js"
+import { IDiffResultModel } from "../lib/model/diff-result-model"
 
 const compareObjects = (
   a: Object,
@@ -7,8 +8,8 @@ const compareObjects = (
   schema: Object | null,
   keyPrefix: string | null,
   options: Object[] | null
-): Object[] => {
-  let differences: Object[] = []
+): IDiffResultModel[] => {
+  let differences: IDiffResultModel[] = []
   const ak: string[] = Object.keys(a)
   const bk: string[] = Object.keys(b)
   const allKeys = underscore.union(ak, bk)
@@ -27,22 +28,26 @@ const compareObjects = (
       if (fieldOptions.skipKey) {
         return
       } else {
-        return differences.push({
+        const diffResult: IDiffResultModel = {
           path: formattedKey,
-          type: "missing field",
+          resultType: "missing element",
           message: `field ${formattedKey} not present in lhs`
-        })
+        }
+
+        return differences.push(diffResult)
       }
     } else {
       //compare values
       const valueA: string = (<any>a)[key].toString()
       const valueB: string = (<any>b)[key].toString()
       if (valueB !== undefined && valueA !== valueB && valueA !== "*") {
-        return differences.push({
+        const diffResult: IDiffResultModel = {
           path: formattedKey,
-          type: "difference in field value",
+          resultType: "difference in element value",
           message: `field ${formattedKey} has lhs value ${valueA} and rhs value ${valueB}`
-        })
+        }
+
+        return differences.push(diffResult)
       }
     }
 
@@ -50,28 +55,14 @@ const compareObjects = (
       if (fieldOptions.skipKey) {
         return
       } else {
-        return differences.push({
+        const diffResult: IDiffResultModel = {
           path: formattedKey,
-          type: "missing field",
+          resultType: "missing element",
           message: `field ${formattedKey} not present in rhs`
-        })
-      }
-    }
+        }
 
-    if (
-      (fieldOptions.compareTypes === undefined ||
-        fieldOptions.compareTypes === true) &&
-      typeof (<any>a)[key] !== typeof (<any>b)[key]
-    ) {
-      return differences.push({
-        path: formattedKey,
-        type: "type equality",
-        message: `lhs field type (${typeof (<any>a)[
-          key
-        ]}) does not match rhs field type (${typeof (<any>b)[key]})`,
-        lhs: (<any>a)[key],
-        rhs: (<any>b)[key]
-      })
+        return differences.push(diffResult)
+      }
     }
 
     if (underscore.isArray((<any>a)[key])) {
@@ -90,18 +81,22 @@ const compareObjects = (
           return
         }
         if (!objB) {
-          return differences.push({
+          const diffResult: IDiffResultModel = {
             path: formattedKey,
-            type: "missing field",
+            resultType: "missing element",
             message: `field ${formattedKey}[${i}] not present in rhs`
-          })
+          }
+
+          return differences.push(diffResult)
         }
         if (!objA) {
-          return differences.push({
+          const diffResult: IDiffResultModel = {
             path: formattedKey,
-            type: "missing field",
-            message: `field ${formattedKey}[${i}] not present in lhs`
-          })
+            resultType: "missing element",
+            message: `element ${formattedKey}[${i}] not present in lhs`
+          }
+
+          return differences.push(diffResult)
         }
         if (
           underscore.isObject((<any>a)[key][i]) &&
@@ -134,6 +129,7 @@ const compareObjects = (
   return differences
 }
 
+// Remove _text key from  xml2json result to be able to reuse compare object function
 function adjustXMLforDiff(input: string): string {
   return input.replace(/({"_(.*?)":)("(.*?)")(})/g, `$3`)
 }
