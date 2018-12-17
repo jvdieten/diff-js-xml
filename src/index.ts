@@ -41,10 +41,12 @@ const compareObjects = (
           const valueA: string = (<any>a)[key].toString()
           const valueB: string = (<any>b)[key].toString()
           if (valueB !== undefined && valueA !== valueB && valueA !== "*") {
+            const resultValueA = JSON.stringify((<any>a)[key], null, 1)
+            const resultValueB = JSON.stringify((<any>b)[key], null, 1)
             const diffResult: IDiffResultModel = {
               path: formattedKey,
               resultType: "difference in element value",
-              message: `field ${formattedKey} has lhs value ${valueA} and rhs value ${valueB}`
+              message: `field ${formattedKey} has lhs value ${resultValueA} and rhs value ${resultValueB}`
             }
 
             return differences.push(diffResult)
