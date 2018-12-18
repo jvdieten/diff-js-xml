@@ -38,8 +38,14 @@ const compareObjects = (
         return
       } else {
         if (options.compareElementValues) {
-          const valueA: string = (<any>a)[key].toString()
-          const valueB: string = (<any>b)[key].toString()
+          let valueA
+          let valueB
+          if ((<any>a)[key] !== undefined) {
+            valueA = (<any>a)[key].toString()
+          }
+          if ((<any>b)[key] !== undefined) {
+            valueB = (<any>b)[key].toString()
+          }
           if (valueB !== undefined && valueA !== valueB && valueA !== "*") {
             const resultValueA = JSON.stringify((<any>a)[key], null, 1)
             const resultValueB = JSON.stringify((<any>b)[key], null, 1)
