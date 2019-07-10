@@ -1,5 +1,5 @@
 {
-  "name": "diff-js-xml",
+  "name": "@codechimp/diff-js-xml",
   "version": "1.0.5",
   "description": "XML JSON object compare module",
   "repository": {
