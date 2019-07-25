@@ -171,11 +171,13 @@ export function diffAsXml(
   const lhsp = xml2json(lhs, {
     compact: true,
     ignoreDoctype: true,
+    ignoreDeclaration: true,
     ignoreAttributes: true
   })
   const rhsp = xml2json(rhs, {
     compact: true,
     ignoreDoctype: true,
+    ignoreDeclaration: true,
     ignoreAttributes: true
   })
   const lhsCompareString = adjustXMLforDiff(lhsp)

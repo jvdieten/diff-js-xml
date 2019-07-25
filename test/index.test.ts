@@ -176,3 +176,22 @@ describe("when comparing wildcard xml element values", () => {
     result.length.should.equal(0)
   })
 })
+
+describe("when comparing two identical xml strings that have declarations", () => {
+  const lhsxml: string =
+    '<?xml version="1.0" encoding="UTF-8"?><string-array name="languages_array"><item>English</item><item>Chinese</item><item>French</item><item>Spanish</item></string-array>'
+  const rhsxml: string =
+    '<?xml version="1.0" encoding="UTF-8"?><string-array name="languages_array"><item>English</item><item>Chinese</item><item>French</item><item>Spanish</item></string-array>'
+
+  it("should return an empty array of differences without failing to parse the resulting JSON", () => {
+    tool.diffAsXml(
+      lhsxml,
+      rhsxml,
+      undefined,
+      undefined,
+      (result: IDiffResultModel[]) => {
+        result.length.should.equal(0)
+      }
+    )
+  })
+})
