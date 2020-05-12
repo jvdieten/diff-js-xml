@@ -12,8 +12,8 @@ const compareObjects = (
   options: IOptionsModel
 ): IDiffResultModel[] => {
   let differences: IDiffResultModel[] = []
-  const ak: string[] = Object.keys(a)
-  const bk: string[] = Object.keys(b)
+  const ak: string[] = Object.keys(a ? a : [])
+  const bk: string[] = Object.keys(b ? b : [])
   const allKeys: string[] = underscore.union(ak, bk)
 
   allKeys.forEach(key => {
@@ -46,6 +46,7 @@ const compareObjects = (
           if ((<any>b)[key] !== undefined) {
             valueB = (<any>b)[key].toString()
           }
+
           if (valueB !== undefined && valueA !== valueB && valueA !== "*") {
             const resultValueA = JSON.stringify((<any>a)[key], null, 1)
             const resultValueB = JSON.stringify((<any>b)[key], null, 1)
@@ -56,24 +57,38 @@ const compareObjects = (
             }
 
             return differences.push(diffResult)
+          } 
+
+          if (!valueB && (valueA !== undefined && JSON.stringify((<any>a)[key], null, 1) !== '{}') && options.skipMissingTagIfValueNull) {
+            console.log(valueB, valueA);
+            const diffResult: IDiffResultModel = {
+              path: formattedKey,
+              resultType: "missing element",
+              message: `field ${formattedKey} not present in rhs`
+            }
+    
+            return differences.push(diffResult)
           }
         }
       }
     }
 
-    if (!underscore.contains(bk, key)) {
-      if (fieldOptions.skipKey) {
-        return
-      } else {
-        const diffResult: IDiffResultModel = {
-          path: formattedKey,
-          resultType: "missing element",
-          message: `field ${formattedKey} not present in rhs`
+    if (!options.skipMissingTagIfValueNull) {
+      if (!underscore.contains(bk, key)) {
+        if (fieldOptions.skipKey) {
+          return
+        } else {
+          const diffResult: IDiffResultModel = {
+            path: formattedKey,
+            resultType: "missing element",
+            message: `field ${formattedKey} not present in rhs`
+          }
+  
+          return differences.push(diffResult)
         }
-
-        return differences.push(diffResult)
       }
     }
+
 
     if (underscore.isArray((<any>a)[key])) {
       for (let i = 0; i < (<any>a)[key].length; i++) {
@@ -89,7 +104,7 @@ const compareObjects = (
         if (objA === 0 && objB === 0) {
           return
         }
-        if (!objB) {
+        if (!options.skipMissingTagIfValueNull && !objB) {
           const diffResult: IDiffResultModel = {
             path: formattedKey,
             resultType: "missing element",
@@ -156,7 +171,7 @@ export function diff(
       rhs,
       schema || {},
       null,
-      options || { compareElementValues: true }
+      options || { compareElementValues: true, skipMissingTagIfValueNull: false }
     )
   )
 }
@@ -190,7 +205,7 @@ export function diffAsXml(
       jsonRhs,
       schema || {},
       null,
-      options || { compareElementValues: true }
+      options || { compareElementValues: true, skipMissingTagIfValueNull: false }
     )
   )
 }

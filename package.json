@@ -17,7 +17,7 @@
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "test:watch": "npm run test -- --watch --watch-extensions ts",
     "cover": "nyc --reporter=lcov --reporter=text npm run test",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "lint": "tslint -t stylish --project  \"tsconfig.json\"",
     "lint:fix": "npm run lint -- --fix",
     "build": "npm run clean && tsc -p tsconfig.production.json",
@@ -55,6 +55,7 @@
     "tslint-config-prettier": "^1.15.0",
     "tslint-microsoft-contrib": "^5.2.1",
     "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "rimraf": "~3.0.2"
   }
 }

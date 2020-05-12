@@ -103,7 +103,7 @@ describe("when schema with skip element is provided that is not in rhs xml", () 
 })
 
 describe("when comparing two different xml element values with compareElementValues false", () => {
-  const optionsNoValueCompare = { compareElementValues: false }
+  const optionsNoValueCompare = { compareElementValues: false, skipMissingTagIfValueNull: false }
 
   const lhsxml: string =
     '<string-array name="languages_array"><item>English2</item><item>Chinese</item><item>French</item><item>Spanish</item></string-array>'
@@ -195,3 +195,88 @@ describe("when comparing two identical xml strings that have declarations", () =
     )
   })
 })
+
+describe("when skipping lhsNullTags", () => {
+  const options = { skipMissingTagIfValueNull: true, compareElementValues: true };
+
+  it("no differences are reported", () => {
+    let lhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item /><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let rhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let result: IDiffResultModel[] = []
+    tool.diffAsXml(
+      lhsxml,
+      rhsxml,
+      undefined,
+      options,
+      (dff: IDiffResultModel[]) => {
+        result = dff
+      }
+    )
+    result.length.should.equal(0)
+  })
+
+  it("one difference is reported.", () => {
+    let lhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item /><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let rhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item>Michael Scott</item><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let result: IDiffResultModel[] = []
+    tool.diffAsXml(
+      lhsxml,
+      rhsxml,
+      undefined,
+      options,
+      (dff: IDiffResultModel[]) => {
+        result = dff
+      }
+    )
+    result.length.should.equal(1)
+    result[0].path.should.equal('root.item');
+    result[0].resultType.should.equal('difference in element value')
+  })
+
+  it("one difference is reported-2.", () => {
+    let lhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let rhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item>Michael Scott</item><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let result: IDiffResultModel[] = []
+    tool.diffAsXml(
+      lhsxml,
+      rhsxml,
+      undefined,
+      options,
+      (dff: IDiffResultModel[]) => {
+        result = dff
+      }
+    )
+    result.length.should.equal(1)
+    result[0].path.should.equal('root.item');
+    result[0].resultType.should.equal('missing element')
+  })
+
+  it("two differences are reported.", () => {
+    let lhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item>Michael Scott</item><item2 /><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let rhsxml: string =
+      '<?xml version="1.0" encoding="UTF-8"?><root><item2>Scranton</item2><item3>Ohio</item3><item4>Dunder Miflin</item4></root>'
+    let result: IDiffResultModel[] = []
+    tool.diffAsXml(
+      lhsxml,
+      rhsxml,
+      undefined,
+      options,
+      (dff: IDiffResultModel[]) => {
+        result = dff
+      }
+    )
+    result.length.should.equal(2)
+    result[0].path.should.equal('root.item');
+    result[0].resultType.should.equal('missing element')
+    result[1].path.should.equal('root.item2')
+    result[1].resultType.should.equal('difference in element value')
+  })
+})
+
