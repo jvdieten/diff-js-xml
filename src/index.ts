@@ -60,7 +60,6 @@ const compareObjects = (
           } 
 
           if (!valueB && (valueA !== undefined && JSON.stringify((<any>a)[key], null, 1) !== '{}') && options.skipMissingTagIfValueNull) {
-            console.log(valueB, valueA);
             const diffResult: IDiffResultModel = {
               path: formattedKey,
               resultType: "missing element",
