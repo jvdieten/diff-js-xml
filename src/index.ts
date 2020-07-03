@@ -4,6 +4,17 @@ import { IDiffResultModel } from "../lib/model/diff-result-model"
 import { IFieldOptions, ISchema } from "../lib/model/field-options-schema"
 import { IOptionsModel } from "../lib/model/options-model"
 
+const defaultOptions = {
+  compareElementValues: true
+}
+
+const defaultXml2JsOptions = {
+  compact: true,
+  ignoreDoctype: true,
+  ignoreDeclaration: true,
+  ignoreAttributes: true
+}
+
 const compareObjects = (
   a: Object,
   b: Object,
@@ -138,9 +149,15 @@ const compareObjects = (
   return differences
 }
 
-// Remove _text key from  xml2json result to be able to reuse compare object function
+/**
+ * Remove all _text keys from xml2json result to be able to reuse compare object function
+ * Works whether nativeType option = true or false
+ * If ignoreAttributes option = false, then the _text key will remain for those elements that have attributes,
+ * which appear in the results JSON like
+ * `{ "someField": { "_attributes": { "foo": "bar" }, "_text": "baz" } }`
+ */
 function adjustXMLforDiff(input: string): string {
-  return input.replace(/({"_(.*?)":)("(.*?)")(})/g, `$3`)
+  return input.replace(/({"_text":)("?(.*?)"?)(})/g, `$2`)
 }
 
 export function diff(
@@ -156,7 +173,7 @@ export function diff(
       rhs,
       schema || {},
       null,
-      options || { compareElementValues: true }
+      underscore.extend({}, defaultOptions, options)
     )
   )
 }
@@ -168,18 +185,13 @@ export function diffAsXml(
   options: IOptionsModel | undefined,
   next: any
 ) {
-  const lhsp = xml2json(lhs, {
-    compact: true,
-    ignoreDoctype: true,
-    ignoreDeclaration: true,
-    ignoreAttributes: true
-  })
-  const rhsp = xml2json(rhs, {
-    compact: true,
-    ignoreDoctype: true,
-    ignoreDeclaration: true,
-    ignoreAttributes: true
-  })
+  const xml2JsOpts = underscore.extend({}, defaultXml2JsOptions)
+  if (options && options.xml2jsOptions) {
+    underscore.extend(xml2JsOpts, options.xml2jsOptions)
+  }
+
+  const lhsp = xml2json(lhs, xml2JsOpts)
+  const rhsp = xml2json(rhs, xml2JsOpts)
   const lhsCompareString = adjustXMLforDiff(lhsp)
   const rhsCompareString = adjustXMLforDiff(rhsp)
   const jsonLhs = JSON.parse(lhsCompareString)
@@ -190,7 +202,7 @@ export function diffAsXml(
       jsonRhs,
       schema || {},
       null,
-      options || { compareElementValues: true }
+      underscore.extend({}, defaultOptions, options)
     )
   )
 }
