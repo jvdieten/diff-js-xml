@@ -1,3 +1,4 @@
 export interface IOptionsModel {
-  compareElementValues: boolean
+  compareElementValues?: boolean
+  xml2jsOptions?: any
 }

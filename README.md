@@ -32,6 +32,9 @@ const schema = { elementA: { skipKey:true}}
 
 **options** generic options or null if not needed current options available:
 - **compareElementValues** to disable comparing of element values default is true
+- **xml2jsOptions** pass through options to xml-js. xml-js has its own default options, and we override a handful: 
+`compact: true, ignoreDoctype: true, ignoreDeclaration: true, ignoreAttributes: true`
+You can override these, or others, but most option combinations have not been tested carefully so use caution.
 
 ```javascript
 const options = {compareElementValues: false}
