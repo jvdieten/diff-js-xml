@@ -35,8 +35,8 @@
   "author": "Joost van Dieten <joost.van.dieten@testassured.nl> (http://www.testassured.nl)",
   "license": "MIT",
   "dependencies": {
-    "underscore": "^1.9.1",
-    "xml-js": "^1.6.8"
+    "underscore": "^1.10.2",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
