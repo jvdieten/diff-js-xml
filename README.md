@@ -74,7 +74,7 @@ tool.diff(lhsObject, rhsObject, schema, options, (result) => {
 });
 ```
 **lhsObject and rhsObject** are the two JSON objects to compare.
-**result** is an array returned from the diff method containing all the differences see above.
+**result** is an array returned from the diff method containing all the differences see example above.
 
 
 ## Contributors
