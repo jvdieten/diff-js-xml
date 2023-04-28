@@ -10,8 +10,7 @@
   "typings": "dist/src/index",
   "files": [
     "lib/**/*",
-    "dist/src/index.js",
-    "dist/src/index.d.ts"
+    "dist/**/*"
   ],
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.test.ts",
