@@ -1,6 +1,8 @@
 [![Travis-ci Build Status](https://travis-ci.com/jvdieten/diff-js-xml.svg?branch=master)](https://travis-ci.com/jvdieten/diff-js-xml)
 [![NPM](https://nodei.co/npm/diff-js-xml.png)](https://nodei.co/npm/diff-js-xml/)
 
+[![Donate with PayPal](https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)](https://www.paypal.com/donate/?hosted_button_id=8BHNM42PKHJ5U)
+
 # diff-js-xml
 Module to compare XML or JSON objects very useful for A-B testing main features:
 
