@@ -10,11 +10,23 @@ Module to compare XML or JSON objects very useful for A-B testing main features:
 - Compare with wildcards for element values
 - Clear reporting of differences in result array see below
 
-## Installation
+### Installation
 ```
 $ npm install diff-js-xml --save
 ```
 ### Usage for comparing XML
+
+typescript
+
+```javascript
+import { diffAsXml } from "diff-js-xml";
+ 
+diffAsXml(lhsXML, rhsXML, schema, options, (result) => {
+});
+```
+
+or javascript
+
 ```javascript
 const tool = require('diff-js-xml');
  
@@ -22,6 +34,7 @@ tool.diffAsXml(lhsXML, rhsXML, schema, options, (result) => {
 
 });
 ```
+
 Before comparing xml is first transformed into JSON object with **xml-js** module  
 
 **lhsXML and rhsXML** are the two XML strings to compare.
@@ -68,13 +81,26 @@ const string =
 ```
 
 ### Usage for comparing JSON
+
+typescript
+
+```javascript
+import { diff } from "diff-js-xml";
+ 
+diff(lhsXML, rhsXML, schema, options, (result) => {
+});
+```
+
+or javascript
+
 ```javascript
 const tool = require('diff-js-xml');
  
-tool.diff(lhsObject, rhsObject, schema, options, (result) => {
+tool.diff(lhsXML, rhsXML, schema, options, (result) => {
 
 });
 ```
+
 **lhsObject and rhsObject** are the two JSON objects to compare.
 **result** is an array returned from the diff method containing all the differences see above.
 
