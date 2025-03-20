@@ -167,7 +167,7 @@ export function diff(
   rhs: Object,
   schema: ISchema | undefined,
   options: IOptionsModel | undefined,
-  next: any
+  next: (result: IDiffResultModel[]) => void
 ) {
   next(
     compareObjects(
@@ -185,7 +185,7 @@ export function diffAsXml(
   rhs: string,
   schema: ISchema | undefined,
   options: IOptionsModel | undefined,
-  next: any
+  next: (result: IDiffResultModel[]) => void
 ) {
   const xml2JsOpts = underscore.extend({}, defaultXml2JsOptions)
   if (options && options.xml2jsOptions) {
